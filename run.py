@@ -130,6 +130,20 @@ def on_release(key):
     name = _name_from_key(key)
     if name and name in pressed:
         pressed.remove(name)
+        time.sleep(0.25)
+        if name not in pressed:
+            if name == 'q':
+                print("Stopped moving forward")
+                y_axis_move("backward")
+            elif name == 'a':
+                print("Stopped moving backward")
+                y_axis_move("forward")
+            elif name == 'left':
+                print("Stopped steering left")
+                x_axis_move("right")
+            elif name == 'right':
+                print("Stopped steering right")
+                x_axis_move("left")
         if name == 'q':
             print("Stopped moving forward")
             y_axis_move("backward")
