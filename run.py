@@ -15,7 +15,7 @@ produces continuous control; releasing it returns the control to zero.
 import sys
 import signal
 import time
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import motor_sequencer
 from pynput import keyboard
 
@@ -26,10 +26,10 @@ sleep_interval = 0.001
 rotation = 20
 sequence = motor_sequencer.forward()
 
-# GPIO.setmode(GPIO.BCM)
-# for pin in updown_pins + leftright_pins:
-#   GPIO.setup(pin, GPIO.OUT)
-#   GPIO.output(pin, 0)
+GPIO.setmode(GPIO.BCM)
+for pin in updown_pins + leftright_pins:
+  GPIO.setup(pin, GPIO.OUT)
+  GPIO.output(pin, 0)
 
 y_axis_direction = 0
 x_axis_direction = 0
@@ -118,15 +118,15 @@ def drive():
         sequence = motor_seq.getForwardSequence()
         for i in range(int(rotation)):
             for step in range(len(sequence)):
-                # for pin in range(4):
-                #     GPIO.output(control_pins[pin], sequence[step][pin])
+                for pin in range(4):
+                    GPIO.output(control_pins[pin], sequence[step][pin])
                 time.sleep(sleep_interval)
     elif y_axis_direction > 0:
         sequence = motor_seq.getBackwardSequence()
         for i in range(int(rotation)):
             for step in range(len(sequence)):
-                # for pin in range(4):
-                #     GPIO.output(control_pins[pin], sequence[step][pin])
+                for pin in range(4):
+                    GPIO.output(control_pins[pin], sequence[step][pin])
                 time.sleep(sleep_interval)
 
 
