@@ -227,7 +227,7 @@ def drive():
 
 
 def main():
-    signal.signal(signal.SIGINT, _signal_handler)
+    # signal.signal(signal.SIGINT, _signal_handler)
     print("Simulator listening — hold keys to control the car. Ctrl-C to exit.")
     print("Controls: q=forward, a=back, ←=left, →=right")
 
