@@ -17,7 +17,8 @@ import signal
 import time
 import RPi.GPIO as GPIO
 import motor_sequencer
-from pynput import keyboard
+from sshkeyboard import listen_keyboard
+import threading
 
 # Motor configuration
 updown_pins = [0,2,3,25]
@@ -38,8 +39,10 @@ x_axis_direction = 0
 TARGET_KEYS = {
     'q': 'q',
     'a': 'a',
-    keyboard.Key.left: 'left',
-    keyboard.Key.right: 'right',
+    'left': 'left',
+    'right': 'right',
+    'LEFT': 'left',
+    'RIGHT': 'right',
 }
 
 # set of currently held target names (subset of {'q','a','left','right'})
@@ -52,8 +55,17 @@ STEER_ANGLE = 30.0  # degrees left/right when held
 
 
 def _name_from_key(key):
-    if key in (keyboard.Key.left, keyboard.Key.right):
-        return TARGET_KEYS.get(key)
+    # sshkeyboard passes simple strings for keys (e.g. 'q', 'left', 'RIGHT')
+    if isinstance(key, str):
+        k = key.lower()
+        if k in ('left', 'arrow_left', 'left_arrow', '←'):
+            return 'left'
+        if k in ('right', 'arrow_right', 'right_arrow', '→'):
+            return 'right'
+        if k in ('q', 'a'):
+            return k
+        return None
+    # fallback for objects (compat with pynput-like keys)
     try:
         char = key.char
     except AttributeError:
@@ -86,6 +98,8 @@ def compute_controls(held):
     speed: positive forward, negative backward, zero if neither or both.
     steering: negative = left degrees, positive = right degrees, zero if neither or both.
     """
+    global y_axis_direction, x_axis_direction
+
     forward = 'q' in held
     backward = 'a' in held
     left = 'left' in held
@@ -135,8 +149,12 @@ def main():
     print("Simulator listening — hold keys to control the car. Ctrl-C to exit.")
     print("Controls: q=forward, a=back, ←=left, →=right")
 
-    listener = keyboard.Listener(on_press=on_press, on_release=on_release)
-    listener.start()
+    # Run sshkeyboard listener in a daemon thread so the main loop can run.
+    def _kb_loop():
+        listen_keyboard(on_press=on_press, on_release=on_release, special_keys=True)
+
+    kb_thread = threading.Thread(target=_kb_loop, daemon=True)
+    kb_thread.start()
 
     last_state = None
     try:
@@ -152,7 +170,7 @@ def main():
     except KeyboardInterrupt:
         pass
     finally:
-        listener.stop()
+        # sshkeyboard listener runs in a daemon thread; it will exit with the process.
         print("Exiting.")
 
 
