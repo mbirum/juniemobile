@@ -24,7 +24,7 @@ import threading
 updown_pins = [11,13,15,37]
 leftright_pins = [16,18,22,36]
 sleep_interval = 0.001
-rotation = 10
+rotation = 30
 sequence = motor_sequencer.forward()
 
 moving_forward = False
