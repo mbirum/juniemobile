@@ -85,7 +85,7 @@ def _name_from_key(key):
 def y_axis_move(direction):
     if direction == "forward":
         sequence = motor_sequencer.forward()
-    else if direction == "backward":
+    elif direction == "backward":
         sequence = motor_sequencer.backward()
     for i in range(int(rotation)):
         for step in range(len(sequence)):
