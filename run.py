@@ -128,20 +128,45 @@ def compute_controls(held):
 
 
 def drive():
-    if y_axis_direction < 0:
-        sequence = motor_sequencer.forward()
-        for i in range(int(rotation)):
-            for step in range(len(sequence)):
-                for pin in range(4):
-                    GPIO.output(updown_pins[pin], sequence[step][pin])
-                time.sleep(sleep_interval)
-    elif y_axis_direction > 0:
-        sequence = motor_sequencer.backward()
-        for i in range(int(rotation)):
-            for step in range(len(sequence)):
-                for pin in range(4):
-                    GPIO.output(updown_pins[pin], sequence[step][pin])
-                time.sleep(sleep_interval)
+    """Step both motors so x and y can move simultaneously.
+
+    Each axis uses the same 4-step sequence from `motor_sequencer`. When an
+    axis is idle its outputs are driven low. Sequences are stepped in
+    lockstep so both axes can move together.
+    """
+    global y_axis_direction, x_axis_direction
+
+    # choose sequences per-axis (idle -> single all-zero step)
+    if y_axis_direction > 0:
+        y_seq = motor_sequencer.forward()
+    elif y_axis_direction < 0:
+        y_seq = motor_sequencer.backward()
+    else:
+        y_seq = [[0, 0, 0, 0]]
+
+    if x_axis_direction > 0:
+        x_seq = motor_sequencer.forward()
+    elif x_axis_direction < 0:
+        x_seq = motor_sequencer.backward()
+    else:
+        x_seq = [[0, 0, 0, 0]]
+
+    # step both sequences together
+    max_steps = max(len(y_seq), len(x_seq))
+    for i in range(int(rotation)):
+        for step in range(max_steps):
+            y_step = y_seq[step % len(y_seq)]
+            x_step = x_seq[step % len(x_seq)]
+
+            # apply y-axis outputs
+            for pin_idx in range(4):
+                GPIO.output(updown_pins[pin_idx], y_step[pin_idx])
+
+            # apply x-axis outputs
+            for pin_idx in range(4):
+                GPIO.output(leftright_pins[pin_idx], x_step[pin_idx])
+
+            time.sleep(sleep_interval)
 
 
 def main():
