@@ -129,14 +129,14 @@ def compute_controls(held):
 
 def drive():
     if y_axis_direction < 0:
-        sequence = motor_seq.getForwardSequence()
+        sequence = motor_sequencer.getForwardSequence()
         for i in range(int(rotation)):
             for step in range(len(sequence)):
                 for pin in range(4):
                     GPIO.output(control_pins[pin], sequence[step][pin])
                 time.sleep(sleep_interval)
     elif y_axis_direction > 0:
-        sequence = motor_seq.getBackwardSequence()
+        sequence = motor_sequencer.getBackwardSequence()
         for i in range(int(rotation)):
             for step in range(len(sequence)):
                 for pin in range(4):
