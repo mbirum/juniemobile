@@ -27,6 +27,11 @@ sleep_interval = 0.001
 rotation = 10
 sequence = motor_sequencer.forward()
 
+moving_forward = False
+moving_backward = False
+moving_left = False
+moving_right = False
+
 GPIO.setmode(GPIO.BOARD)
 for pin in updown_pins:
   GPIO.setup(pin, GPIO.OUT)
@@ -77,17 +82,66 @@ def _name_from_key(key):
         return None
     return TARGET_KEYS.get(char.lower())
 
+def y_axis_move(direction):
+    if direction == "forward":
+        sequence = motor_sequencer.forward()
+    else if direction == "backward":
+        sequence = motor_sequencer.backward()
+    for i in range(int(rotation)):
+        for step in range(len(sequence)):
+            y_step = sequence[step % len(sequence)]
+            # apply y-axis outputs
+            for pin_idx in range(4):
+                GPIO.output(updown_pins[pin_idx], y_step[pin_idx])
+            time.sleep(sleep_interval)
+
+def x_axis_move(direction):
+    if direction == "right":
+        sequence = motor_sequencer.forward()
+    else if direction == "left":
+        sequence = motor_sequencer.backward()
+    for i in range(int(rotation)):
+        for step in range(len(sequence)):
+            x_step = sequence[step % len(sequence)]
+            # apply x-axis outputs
+            for pin_idx in range(4):
+                GPIO.output(leftright_pins[pin_idx], x_step[pin_idx])
+            time.sleep(sleep_interval)
 
 def on_press(key):
     name = _name_from_key(key)
     if name:
-        pressed.add(name)
-
+        if name not in pressed:
+            pressed.add(name)
+            if name == 'q':
+                print("Moving forward")
+                y_axis_move("forward")
+            elif name == 'a':
+                print("Moving backward")
+                y_axis_move("backward")
+            elif name == 'left':
+                print("Steering left")
+                x_axis_move("left")
+            elif name == 'right':
+                print("Steering right")
+                x_axis_move("right")
 
 def on_release(key):
     name = _name_from_key(key)
     if name and name in pressed:
         pressed.remove(name)
+        if name == 'q':
+            print("Stopped moving forward")
+            y_axis_move("backward")
+        elif name == 'a':
+            print("Stopped moving backward")
+            y_axis_move("forward")
+        elif name == 'left':
+            print("Stopped steering left")
+            x_axis_move("right")
+        elif name == 'right':
+            print("Stopped steering right")
+            x_axis_move("left")
 
 
 def _signal_handler(sig, frame):
@@ -188,7 +242,6 @@ def main():
     try:
         while True:
             speed, steering = compute_controls(pressed)
-            drive()
             state = (speed, steering, tuple(sorted(pressed)))
             # print every tick; if you prefer only on-change, compare with last_state
             print(f"speed={speed:.2f} steering={steering:.1f} pressed={'+'.join(sorted(pressed)) or 'none'}")
