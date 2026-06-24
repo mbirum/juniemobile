@@ -249,6 +249,7 @@ def main():
             # sys.stdout.flush()
             # last_state = state
             time.sleep(TICK)
+            print(pressed)
     except KeyboardInterrupt:
         pass
     finally:
