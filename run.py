@@ -57,7 +57,7 @@ TARGET_KEYS = {
 pressed = set()
 
 # simulator parameters
-TICK = 0.1  # seconds between updates (10 Hz)
+TICK = 0.01  # seconds between updates (10 Hz)
 MAX_SPEED = 1.0  # m/s for forward/backward when held
 STEER_ANGLE = 30.0  # degrees left/right when held
 
@@ -241,13 +241,14 @@ def main():
     last_state = None
     try:
         while True:
-            speed, steering = compute_controls(pressed)
-            state = (speed, steering, tuple(sorted(pressed)))
+            do_nothing = True
+            # speed, steering = compute_controls(pressed)
+            # state = (speed, steering, tuple(sorted(pressed)))
             # print every tick; if you prefer only on-change, compare with last_state
-            print(f"speed={speed:.2f} steering={steering:.1f} pressed={'+'.join(sorted(pressed)) or 'none'}")
-            sys.stdout.flush()
-            last_state = state
-            time.sleep(TICK)
+            # print(f"speed={speed:.2f} steering={steering:.1f} pressed={'+'.join(sorted(pressed)) or 'none'}")
+            # sys.stdout.flush()
+            # last_state = state
+            # time.sleep(TICK)
     except KeyboardInterrupt:
         pass
     finally:
