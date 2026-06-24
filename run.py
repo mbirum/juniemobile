@@ -15,7 +15,23 @@ produces continuous control; releasing it returns the control to zero.
 import sys
 import signal
 import time
+import RPi.GPIO as GPIO
+import motor_sequencer
 from pynput import keyboard
+
+# Motor configuration
+updown_pins = [0,2,3,25]
+leftright_pins = [4,5,6,27]
+sleep_interval = 0.001
+rotation = 20
+sequence = motor_sequencer.forward()
+
+for pin in updown_pins + leftright_pins:
+  GPIO.setup(pin, GPIO.OUT)
+  GPIO.output(pin, 0)
+
+y_axis_direction = 0
+x_axis_direction = 0
 
 # canonical target names used internally
 TARGET_KEYS = {
@@ -76,19 +92,41 @@ def compute_controls(held):
 
     if forward and not backward:
         speed = MAX_SPEED
+        y_axis_direction = 1
     elif backward and not forward:
         speed = -MAX_SPEED
+        y_axis_direction = -1
     else:
         speed = 0.0
+        y_axis_direction = 0
 
     if left and not right:
         steering = -STEER_ANGLE
+        x_axis_direction = -1
     elif right and not left:
         steering = STEER_ANGLE
+        x_axis_direction = 1
     else:
         steering = 0.0
-
+        x_axis_direction = 0
     return speed, steering
+
+
+def drive():
+    if y_axis_direction < 0:
+        sequence = motor_seq.getForwardSequence()
+        for i in range(int(rotation)):
+            for step in range(len(sequence)):
+                for pin in range(4):
+                    GPIO.output(control_pins[pin], sequence[step][pin])
+                time.sleep(sleep_interval)
+    elif y_axis_direction > 0:
+        sequence = motor_seq.getBackwardSequence()
+        for i in range(int(rotation)):
+            for step in range(len(sequence)):
+                for pin in range(4):
+                    GPIO.output(control_pins[pin], sequence[step][pin])
+                time.sleep(sleep_interval)
 
 
 def main():
@@ -103,6 +141,7 @@ def main():
     try:
         while True:
             speed, steering = compute_controls(pressed)
+            drive()
             state = (speed, steering, tuple(sorted(pressed)))
             # print every tick; if you prefer only on-change, compare with last_state
             print(f"speed={speed:.2f} steering={steering:.1f} pressed={'+'.join(sorted(pressed)) or 'none'}")
