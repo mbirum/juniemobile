@@ -21,13 +21,16 @@ from sshkeyboard import listen_keyboard
 import threading
 
 # Motor configuration
-# updown_pins = [0,2,3,25]
+updown_pins = [0,2,3,25]
 leftright_pins = [4,5,6,27]
 sleep_interval = 0.001
 rotation = 10
 sequence = motor_sequencer.forward()
 
 GPIO.setmode(GPIO.BCM)
+for pin in updown_pins:
+  GPIO.setup(pin, GPIO.OUT)
+  GPIO.output(pin, 0)
 for pin in leftright_pins:
   GPIO.setup(pin, GPIO.OUT)
   GPIO.output(pin, 0)
