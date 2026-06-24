@@ -151,7 +151,7 @@ def main():
 
     # Run sshkeyboard listener in a daemon thread so the main loop can run.
     def _kb_loop():
-        listen_keyboard(on_press=on_press, on_release=on_release, special_keys=True)
+        listen_keyboard(on_press=on_press, on_release=on_release)
 
     kb_thread = threading.Thread(target=_kb_loop, daemon=True)
     kb_thread.start()
