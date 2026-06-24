@@ -57,7 +57,7 @@ TARGET_KEYS = {
 pressed = set()
 
 # simulator parameters
-TICK = 0.01  # seconds between updates (10 Hz)
+TICK = 0.001  # seconds between updates (10 Hz)
 MAX_SPEED = 1.0  # m/s for forward/backward when held
 STEER_ANGLE = 30.0  # degrees left/right when held
 
