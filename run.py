@@ -26,6 +26,7 @@ sleep_interval = 0.001
 rotation = 20
 sequence = motor_sequencer.forward()
 
+GPIO.setmode(GPIO.BCM)
 for pin in updown_pins + leftright_pins:
   GPIO.setup(pin, GPIO.OUT)
   GPIO.output(pin, 0)
