@@ -98,7 +98,7 @@ def y_axis_move(direction):
 def x_axis_move(direction):
     if direction == "right":
         sequence = motor_sequencer.forward()
-    else if direction == "left":
+    elif direction == "left":
         sequence = motor_sequencer.backward()
     for i in range(int(rotation)):
         for step in range(len(sequence)):
