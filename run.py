@@ -248,7 +248,7 @@ def main():
             # print(f"speed={speed:.2f} steering={steering:.1f} pressed={'+'.join(sorted(pressed)) or 'none'}")
             # sys.stdout.flush()
             # last_state = state
-            # time.sleep(TICK)
+            time.sleep(TICK)
     except KeyboardInterrupt:
         pass
     finally:
