@@ -121,15 +121,15 @@ def apply_y_direction(direction, overwrite=False):
 def on_press(key):
     global y_axis_direction
     name = key
-    print(f'key={name}')
     if name:
         if name == '1' or name == '2' or name == '3':
             if axis == "y" and y_axis_direction < 1:
                 y_axis_move("forward", int(name))
                 apply_y_direction(1, overwrite=True)
         elif name == 'q' or name == 'w' or name == 'e':
+            translated_speed = 1 if name == 'q' else speed = 2 if name == 'w' else speed = 3
             if axis == "y" and y_axis_direction > -1:
-                y_axis_move("backward", int(name))
+                y_axis_move("backward", translated_speed)
                 apply_y_direction(-1, overwrite=True)
         elif name == 'a':
             move_backward = True
