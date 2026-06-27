@@ -17,7 +17,6 @@ axis = sys.argv[1]
 # Motor configuration
 updown_pins = [11,13,15,37]
 leftright_pins = [16,18,22,36]
-control_pins = updown_pins if axis == "y" else leftright_pins
 sleep_interval = 0.001
 rotation = 30
 sequence = motor_sequencer.forward()
@@ -31,14 +30,12 @@ speed = 1
 
 # pin setup
 GPIO.setmode(GPIO.BOARD)
-if axis == "y":
-    for pin in updown_pins:
-        GPIO.setup(pin, GPIO.OUT)
-        GPIO.output(pin, 0)
-elif axis == "x":
-    for pin in leftright_pins:
-        GPIO.setup(pin, GPIO.OUT)
-        GPIO.output(pin, 0)
+for pin in updown_pins:
+    GPIO.setup(pin, GPIO.OUT)
+    GPIO.output(pin, 0)
+for pin in leftright_pins:
+    GPIO.setup(pin, GPIO.OUT)
+    GPIO.output(pin, 0)
 
 y_axis_direction = 0
 prior_y_direction = 0
@@ -125,13 +122,13 @@ def on_press(key):
     name = key
     if name:
         if name == '1' or name == '2' or name == '3':
-            if axis == "y" and y_axis_direction < 1:
+            if y_axis_direction < 1:
                 apply_y_direction(1, overwrite=True)
                 y_axis_move("forward", int(name))
                 apply_y_direction(0, overwrite=True)
         elif name == 'q' or name == 'w' or name == 'e':
             translated_speed = 1 if name == 'q' else 2 if name == 'w' else 3
-            if axis == "y" and y_axis_direction > -1:
+            if y_axis_direction > -1:
                 apply_y_direction(-1, overwrite=True)
                 y_axis_move("backward", translated_speed)
                 apply_y_direction(0, overwrite=True)
@@ -150,12 +147,11 @@ def _signal_handler(sig, frame):
 
 def steer():
     global x_axis_direction
-    if axis == "x":
-        print(f'x-direction={x_axis_direction}')
-        if x_axis_direction > prior_x_direction:
-            x_axis_move("right")
-        elif x_axis_direction < prior_x_direction:
-            x_axis_move("left")
+    print(f'x-direction={x_axis_direction}')
+    if x_axis_direction > prior_x_direction:
+        x_axis_move("right")
+    elif x_axis_direction < prior_x_direction:
+        x_axis_move("left")
 
 
 TICK = 0.5
