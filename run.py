@@ -119,7 +119,8 @@ def apply_y_direction(direction, overwrite=False):
         y_axis_direction = -1
 
 def on_press(key):
-    name = _name_from_key(key)
+    name = key
+    print(f'key={name}')
     if name:
         if name not in pressed:
             pressed.add(name)
