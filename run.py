@@ -122,22 +122,20 @@ def on_press(key):
     name = key
     print(f'key={name}')
     if name:
-        if name not in pressed:
-            pressed.add(name)
-            if name == '1' or name == '2' or name == '3':
-                if axis == "y" and y_axis_direction < 1:
-                    y_axis_move("forward", int(name))
-                    apply_y_direction(1, overwrite=True)
-            elif name == 'q' or name == 'w' or name == 'e':
-                if axis == "y" and y_axis_direction > -1:
-                    y_axis_move("backward", int(name))
-                    apply_y_direction(-1, overwrite=True)
-            elif name == 'a':
-                move_backward = True
-            elif name == 'left':
-                apply_x_direction(-1)
-            elif name == 'right':
-                apply_x_direction(1)
+        if name == '1' or name == '2' or name == '3':
+            if axis == "y" and y_axis_direction < 1:
+                y_axis_move("forward", int(name))
+                apply_y_direction(1, overwrite=True)
+        elif name == 'q' or name == 'w' or name == 'e':
+            if axis == "y" and y_axis_direction > -1:
+                y_axis_move("backward", int(name))
+                apply_y_direction(-1, overwrite=True)
+        elif name == 'a':
+            move_backward = True
+        elif name == 'left':
+            apply_x_direction(-1)
+        elif name == 'right':
+            apply_x_direction(1)
 
 
 def _signal_handler(sig, frame):
