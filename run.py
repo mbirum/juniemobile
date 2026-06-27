@@ -84,8 +84,8 @@ def y_axis_move(direction, speed):
                 GPIO.output(updown_pins[pin_idx], y_step[pin_idx])
             time.sleep(sleep_interval)
 
-    print("applying 0 y direction")
     apply_y_direction(0, overwrite=True)  # Reset y_axis_direction after movement
+
 
 def x_axis_move(direction):
     if direction == "right":
@@ -112,7 +112,6 @@ def apply_y_direction(direction, overwrite=False):
     global y_axis_direction
     if overwrite:
         y_axis_direction = direction
-        print(f'set y direction to {y_axis_direction}')
     else:
         y_axis_direction = y_axis_direction + direction
 
@@ -126,13 +125,11 @@ def on_press(key):
     name = key
     if name:
         if name == '1' or name == '2' or name == '3':
-            print(f'y-direction={y_axis_direction}')
             if axis == "y" and y_axis_direction < 1:
                 apply_y_direction(1, overwrite=True)
                 y_axis_move("forward", int(name))
                 apply_y_direction(0, overwrite=True)
         elif name == 'q' or name == 'w' or name == 'e':
-            print(f'y-direction={y_axis_direction}')
             translated_speed = 1 if name == 'q' else 2 if name == 'w' else 3
             if axis == "y" and y_axis_direction > -1:
                 apply_y_direction(-1, overwrite=True)
