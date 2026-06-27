@@ -119,6 +119,7 @@ def apply_y_direction(direction, overwrite=False):
         y_axis_direction = -1
 
 def on_press(key):
+    global y_axis_direction
     name = key
     print(f'key={name}')
     if name:
@@ -144,6 +145,7 @@ def _signal_handler(sig, frame):
 
 
 def steer():
+    global x_axis_direction
     if axis == "x":
         print(f'x-direction={x_axis_direction}')
         if x_axis_direction > prior_x_direction:
@@ -155,6 +157,7 @@ def steer():
 TICK = 0.5
 
 def main():
+    global x_axis_direction
     signal.signal(signal.SIGINT, _signal_handler)
     print("DRIVE JUNIE, DRIVE!")
 
