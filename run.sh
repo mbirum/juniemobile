@@ -1,3 +1,3 @@
 #!/bin/bash
 
-env/bin/python3 run.py $1
+env/bin/python3 run.py

@@ -7,12 +7,6 @@ import motor_sequencer
 from sshkeyboard import listen_keyboard
 import threading
 
-# get axis
-if len(sys.argv) < 1:
-    print("Usage: python run.py [axis]")
-    print("axis: 'x' or 'y'")
-    sys.exit(1)
-axis = sys.argv[1]
 
 # Motor configuration
 updown_pins = [11,13,15,37]
