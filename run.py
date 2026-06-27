@@ -74,9 +74,9 @@ def y_axis_move(direction, speed):
 
     # second sequence
     if direction == "forward":
-        print("motor move up")
-    elif direction == "backward":
         print("motor move down")
+    elif direction == "backward":
+        print("motor move up")
     for i in range(int(rotation)):
         for step in range(len(second_sequence)):
             y_step = second_sequence[step % len(second_sequence)]
