@@ -84,6 +84,7 @@ def y_axis_move(direction, speed):
                 GPIO.output(updown_pins[pin_idx], y_step[pin_idx])
             time.sleep(sleep_interval)
 
+    print("applying 0 y direction")
     apply_y_direction(0, overwrite=True)  # Reset y_axis_direction after movement
 
 def x_axis_move(direction):
@@ -111,6 +112,7 @@ def apply_y_direction(direction, overwrite=False):
     global y_axis_direction
     if overwrite:
         y_axis_direction = direction
+        print(f'set y direction to {y_axis_direction}')
     else:
         y_axis_direction = y_axis_direction + direction
     if y_axis_direction > 1:
