@@ -123,10 +123,12 @@ def on_press(key):
     name = key
     if name:
         if name == '1' or name == '2' or name == '3':
+            print(f'y-direction={y_axis_direction}')
             if axis == "y" and y_axis_direction < 1:
                 y_axis_move("forward", int(name))
                 apply_y_direction(1, overwrite=True)
         elif name == 'q' or name == 'w' or name == 'e':
+            print(f'y-direction={y_axis_direction}')
             translated_speed = 1 if name == 'q' else 2 if name == 'w' else 3
             if axis == "y" and y_axis_direction > -1:
                 y_axis_move("backward", translated_speed)
