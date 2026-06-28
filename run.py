@@ -79,6 +79,7 @@ def y_axis_move(direction, speed):
 
 
 def x_axis_move(direction):
+    print(f"motor move {direction}")
     if direction == "right":
         sequence = motor_sequencer.forward()
     elif direction == "left":
