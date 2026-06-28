@@ -32,7 +32,6 @@ for pin in leftright_pins:
     GPIO.output(pin, 0)
 
 y_axis_direction = 0
-prior_y_direction = 0
 x_axis_direction = 0
 prior_x_direction = 0
 
@@ -152,7 +151,7 @@ def steer():
 TICK = 0.5
 
 def main():
-    global x_axis_direction
+    global x_axis_direction, prior_x_direction
     signal.signal(signal.SIGINT, _signal_handler)
     print("DRIVE JUNIE, DRIVE!")
 
