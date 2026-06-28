@@ -148,7 +148,7 @@ def steer():
         x_axis_move("left")
 
 
-TICK = 0.1
+TICK = 0.01
 
 def main():
     global x_axis_direction, prior_x_direction
