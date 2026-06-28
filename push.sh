@@ -2,4 +2,4 @@
 
 git add .
 git commit -m "fixes"
-git push origin main
+git push origin HEAD
