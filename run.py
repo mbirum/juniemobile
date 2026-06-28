@@ -10,7 +10,7 @@ import threading
 
 # Motor configuration
 updown_pins = [11,13,15,37]
-leftright_pins = [16,18,22,36]
+leftright_pins = [16,18,22,32]
 sleep_interval = 0.001
 rotation = 30
 sequence = motor_sequencer.forward()
@@ -140,7 +140,7 @@ def _signal_handler(sig, frame):
 
 
 def steer():
-    global x_axis_direction
+    global x_axis_direction, prior_x_direction
     print(f'x-direction={x_axis_direction}')
     if x_axis_direction > prior_x_direction:
         x_axis_move("right")
