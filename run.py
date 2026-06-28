@@ -12,7 +12,7 @@ import threading
 updown_pins = [11,13,15,37]
 leftright_pins = [16,18,22,32]
 sleep_interval = 0.001
-rotation = 50
+rotation = 40
 sequence = motor_sequencer.forward()
 
 # control variables
@@ -56,11 +56,11 @@ def y_axis_move(direction, speed):
             time.sleep(sleep_interval)
 
     if speed == 1:
-        time.sleep(0.2)  # Short movement
+        time.sleep(0.1)  # Short movement
     elif speed == 2:
-        time.sleep(0.6)  # Longer movement for everyday use
+        time.sleep(0.35)  # Longer movement for everyday use
     elif speed == 3:
-        time.sleep(1.5)  # Only use for long straight-aways
+        time.sleep(1)  # Only use for long straight-aways
 
     # second sequence
     if direction == "forward":
