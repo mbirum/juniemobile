@@ -86,14 +86,14 @@ class Motor:
             return
 
         self.position.write(new_position)
-        self.motor_sequence(direction)
+        self.motor_sequence(direction, 25)
 
         if self.axis == "y":
             time.sleep(self.get_sleep_duration(duration))
             new_direction = direction * -1
             new_position = self.position.get() + new_direction
             self.position.write(new_position)
-            self.motor_sequence(new_direction)
+            self.motor_sequence(new_direction, 25)
 
     def budge(self, direction):
         self.motor_sequence(direction, 2)
