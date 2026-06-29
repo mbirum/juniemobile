@@ -3,6 +3,9 @@ import time
 import threading
 import RPi.GPIO as GPIO
 
+default_distance = 20
+default_move_rate = 0.001
+
 class MotorPosition:
     position = 0
     _lock = threading.Lock()
@@ -29,9 +32,6 @@ class Motor:
     x_axis_pins = [11,13,15,37]
     y_axis_pins = [16,18,22,32]
     control_pins = [0, 0, 0, 0]
-
-    default_distance = 20
-    default_move_rate = 0.001
 
 
     def __init__(self, axis):
@@ -62,7 +62,7 @@ class Motor:
     def free(self):
         return self.is_free
 
-    def motor_sequence(self, direction, distance = self.default_distance, rate = self.default_move_rate):
+    def motor_sequence(self, direction, distance = default_distance, rate = default_move_rate):
         sequence = motor_sequencer.forward()
         if direction < 0:
             sequence = motor_sequencer.backward()
