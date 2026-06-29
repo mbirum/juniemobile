@@ -1,179 +1,68 @@
-
-import sys
 import signal
-import time
-import RPi.GPIO as GPIO
-import motor_sequencer
 from sshkeyboard import listen_keyboard
 import threading
+from motor import Motor
+import RPi.GPIO as GPIO
 
+xmotor = Motor("x")
+ymotor = Motor("y")
 
-# Motor configuration
-updown_pins = [11,13,15,37]
-leftright_pins = [16,18,22,32]
-sleep_interval = 0.001
-rotation = 40
-sequence = motor_sequencer.forward()
-
-# control variables
-move_forward = False
-move_backward = False
-move_left = False
-move_right = False
-speed = 1
-
-# pin setup
-GPIO.setmode(GPIO.BOARD)
-for pin in updown_pins:
-    GPIO.setup(pin, GPIO.OUT)
-    GPIO.output(pin, 0)
-for pin in leftright_pins:
-    GPIO.setup(pin, GPIO.OUT)
-    GPIO.output(pin, 0)
-
-y_axis_direction = 0
-x_axis_direction = 0
-prior_x_direction = 0
-
-
-def y_axis_move(direction, speed):
-    initial_sequence = motor_sequencer.forward()
-    second_sequence = motor_sequencer.backward()
-    if direction == "backward":
-        initial_sequence = motor_sequencer.backward()
-        second_sequence = motor_sequencer.forward()
-
-    # initial sequence
-    if direction == "forward":
-        print("motor move up")
-    elif direction == "backward":
-        print("motor move down")
-    for i in range(int(rotation)):
-        for step in range(len(initial_sequence)):
-            y_step = initial_sequence[step % len(initial_sequence)]
-            for pin_idx in range(4):
-                GPIO.output(updown_pins[pin_idx], y_step[pin_idx])
-            time.sleep(sleep_interval)
-
-    if speed == 1:
-        time.sleep(0.1)  # Short movement
-    elif speed == 2:
-        time.sleep(0.35)  # Longer movement for everyday use
-    elif speed == 3:
-        time.sleep(1)  # Only use for long straight-aways
-
-    # second sequence
-    if direction == "forward":
-        print("motor move down")
-    elif direction == "backward":
-        print("motor move up")
-    for i in range(int(rotation)):
-        for step in range(len(second_sequence)):
-            y_step = second_sequence[step % len(second_sequence)]
-            for pin_idx in range(4):
-                GPIO.output(updown_pins[pin_idx], y_step[pin_idx])
-            time.sleep(sleep_interval)
-
-    apply_y_direction(0, overwrite=True)  # Reset y_axis_direction after movement
-
-
-def x_axis_move(direction):
-    print(f"motor move {direction}")
-    if direction == "right":
-        sequence = motor_sequencer.forward()
-    elif direction == "left":
-        sequence = motor_sequencer.backward()
-    for i in range(int(rotation)):
-        for step in range(len(sequence)):
-            x_step = sequence[step % len(sequence)]
-            # apply x-axis outputs
-            for pin_idx in range(4):
-                GPIO.output(leftright_pins[pin_idx], x_step[pin_idx])
-            time.sleep(sleep_interval)
-
-def apply_x_direction(direction):
-    global x_axis_direction
-    x_axis_direction = x_axis_direction + direction
-    if x_axis_direction > 1:
-        x_axis_direction = 1
-    elif x_axis_direction < -1:
-        x_axis_direction = -1
-
-def apply_y_direction(direction, overwrite=False):
-    global y_axis_direction
-    if overwrite:
-        y_axis_direction = direction
+def get_axis_direction_duration(key):
+    if key == "left":
+        return "x", -1, 0
+    elif key == "right":
+        return "x", 1, 0
+    elif key == "q" or key == "w" or key == "e":
+        duration = 1 if key == "q" else 2 if key == "w" else 3
+        return "y", -1, duration
+    elif key == "1" or key == "2" or key == "3":
+        return "y", 1, int(key)
+    elif key == "o":
+        return "x", -1, 2
+    elif key == "p":
+        return "x", 1, 2
+    elif key == "l":
+        return "y", -1, 2
+    elif key == ";":
+        return "y", 1, 2 
     else:
-        y_axis_direction = y_axis_direction + direction
-
-    if y_axis_direction > 1:
-        y_axis_direction = 1
-    elif y_axis_direction < -1:
-        y_axis_direction = -1
+        return "none", 0, 0
 
 def on_press(key):
-    global y_axis_direction
-    name = key
-    if name:
-        if name == '1' or name == '2' or name == '3':
-            if y_axis_direction < 1:
-                apply_y_direction(1, overwrite=True)
-                y_axis_move("forward", int(name))
-                apply_y_direction(0, overwrite=True)
-        elif name == 'q' or name == 'w' or name == 'e':
-            translated_speed = 1 if name == 'q' else 2 if name == 'w' else 3
-            if y_axis_direction > -1:
-                apply_y_direction(-1, overwrite=True)
-                y_axis_move("backward", translated_speed)
-                apply_y_direction(0, overwrite=True)
-        elif name == 'a':
-            move_backward = True
-        elif name == 'left':
-            apply_x_direction(-1)
-        elif name == 'right':
-            apply_x_direction(1)
-
-
-def _signal_handler(sig, frame):
-    print("\nExiting.")
-    sys.exit(0)
-
-
-def steer():
-    global x_axis_direction, prior_x_direction
-    print(f'x-direction={x_axis_direction}')
-    if x_axis_direction > prior_x_direction:
-        x_axis_move("right")
-    elif x_axis_direction < prior_x_direction:
-        x_axis_move("left")
-
-
-TICK = 0.01
+    axis, direction, duration = get_axis_direction_duration(key)
+    if axis == "x":
+        if key == "o" or key == "p":
+            xmotor.budge(direction)
+        elif xmotor.free():
+            xmotor.move(direction, duration)
+    elif axis == "y":
+        if key == "l" or key == ";":
+            ymotor.budge(direction)
+        elif ymotor.free():
+            ymotor.move(direction, duration)
 
 def main():
-    global x_axis_direction, prior_x_direction
-    signal.signal(signal.SIGINT, _signal_handler)
     print("DRIVE JUNIE, DRIVE!")
-
-    # Run sshkeyboard listener in a daemon thread so the main loop can run.
+    print('')
+    
     def _kb_loop():
         listen_keyboard(on_press=on_press)
-
     kb_thread = threading.Thread(target=_kb_loop, daemon=True)
     kb_thread.start()
-
-    last_state = None
+    
     try:
         while True:
-            steer()
-            prior_x_direction = x_axis_direction
-            time.sleep(TICK)
+            pass
     except KeyboardInterrupt:
         pass
     finally:
-        # sshkeyboard listener runs in a daemon thread; it will exit with the process.
+        print('')
+        print("Returning xmotor")
+        xmotor.go_home()
+        print("Returning ymotor")
+        ymotor.go_home()
+        GPIO.cleanup()
         print("Exiting.")
-
 
 if __name__ == '__main__':
     main()
