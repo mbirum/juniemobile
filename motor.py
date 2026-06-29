@@ -9,7 +9,7 @@ class MotorPosition:
 
     def write(self, position):
         if position >= -1 and position <= 1:
-            with _lock:
+            with self._lock:
                 self.position = position
         else:
             print(f'error writing position: {position}')
