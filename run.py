@@ -1,6 +1,7 @@
 import signal
 from sshkeyboard import listen_keyboard
 import threading
+from motor import Motor
 
 xmotor = Motor("x")
 ymotor = Motor("y")
