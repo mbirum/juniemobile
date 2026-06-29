@@ -78,7 +78,7 @@ class Motor:
         elif direction < 0:
             self.motor_sequence(motor_sequencer.backward())
 
-        if axis == "y":
+        if self.axis == "y":
             time.sleep(get_sleep_duration(duration))
             new_direction = direction * -1
             new_position = self.position.get() + new_direction
