@@ -46,7 +46,7 @@ class Motor:
             GPIO.output(pin, 0)
 
 
-    def get_sleep_duration(duration_digit):
+    def get_sleep_duration(self, duration_digit):
         if duration_digit == 1:
             return 0.1
         elif duration_digit == 2:
