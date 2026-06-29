@@ -94,6 +94,8 @@ class Motor:
             self.position.write(new_position)
             self.motor_sequence(new_direction)
 
+    def budge(self, direction):
+        self.motor_sequence(direction, 2)
 
     def go_home(self):
         if self.degree == 0:

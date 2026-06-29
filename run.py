@@ -18,15 +18,27 @@ def get_axis_direction_duration(key):
         return "y", -1, duration
     elif key == "1" or key == "2" or key == "3":
         return "y", 1, int(key)
+    elif key == "o":
+        return "x", -1, 2
+    elif key == "p":
+        return "x", 1, 2
+    elif key == "l":
+        return "y", -1, 2
+    elif key == ";":
+        return "y", 1, 2 
     else:
         return "none", 0, 0
 
 def on_press(key):
     axis, direction, duration = get_axis_direction_duration(key)
     if axis == "x":
+        if key == "o" or key == "p":
+            xmotor.budge(direction)
         if xmotor.free():
             xmotor.move(direction, duration)
     elif axis == "y":
+        if key == "l" or key == ";":
+            ymotor.budge(direction)
         if ymotor.free():
             ymotor.move(direction, duration)
 
