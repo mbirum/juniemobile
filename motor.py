@@ -62,7 +62,7 @@ class Motor:
     def free(self):
         return self.is_free
 
-    def motor_sequence(self, direction, distance = default_distance, rate = default_move_rate):
+    def motor_sequence(self, direction, distance = default_distance, budge = False, rate = default_move_rate):
         print(f'motor_sequence:: direction={direction} distance={distance} rate={rate}')
         sequence = motor_sequencer.forward()
         if direction < 0:
@@ -74,7 +74,8 @@ class Motor:
                 for pin_idx in range(4):
                     GPIO.output(self.control_pins[pin_idx], x_step[pin_idx])
                 time.sleep(rate)
-            self.degree = self.degree + direction
+            if not budge:
+                self.degree = self.degree + direction
         self.is_free = True
 
 
