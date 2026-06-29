@@ -3,7 +3,7 @@ import time
 import threading
 import RPi.GPIO as GPIO
 
-default_distance = 20
+default_distance = 90
 default_move_rate = 0.001
 
 class MotorPosition:
