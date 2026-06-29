@@ -33,7 +33,6 @@ class Motor:
     # y_axis_pins = [16,18,22,32]
     control_pins = [0, 0, 0, 0]
 
-
     def __init__(self, axis):
         self.axis = axis
         if axis == "x":
@@ -42,13 +41,11 @@ class Motor:
             self.control_pins = self.y_axis_pins
         self.set_up_pins()
 
-
     def set_up_pins(self):
         GPIO.setmode(GPIO.BOARD)
         for pin in self.control_pins:
             GPIO.setup(pin, GPIO.OUT)
             GPIO.output(pin, 0)
-
 
     def get_sleep_duration(self, duration_digit):
         if duration_digit == 1:
@@ -58,7 +55,6 @@ class Motor:
         elif duration_digit == 3:
             return 0.75
     
-
     def free(self):
         return self.is_free
 
@@ -77,7 +73,6 @@ class Motor:
             if not budge:
                 self.degree = self.degree + direction
         self.is_free = True
-
 
     def move(self, direction, duration):
         new_position = self.position.get() + direction

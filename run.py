@@ -7,8 +7,6 @@ import RPi.GPIO as GPIO
 xmotor = Motor("x")
 ymotor = Motor("y")
 
-TICK = 0.01
-
 def get_axis_direction_duration(key):
     if key == "left":
         return "x", -1, 0
@@ -45,11 +43,13 @@ def on_press(key):
 
 def main():
     print("DRIVE JUNIE, DRIVE!")
-    # Run sshkeyboard listener in a daemon thread so the main loop can run.
+    print('')
+    
     def _kb_loop():
         listen_keyboard(on_press=on_press)
     kb_thread = threading.Thread(target=_kb_loop, daemon=True)
     kb_thread.start()
+    
     try:
         while True:
             pass
