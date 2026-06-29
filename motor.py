@@ -3,7 +3,7 @@ import time
 import threading
 import RPi.GPIO as GPIO
 
-default_distance = 90
+default_distance = 20
 default_move_rate = 0.001
 
 class MotorPosition:
@@ -87,7 +87,6 @@ class Motor:
         self.position.write(new_position)
         self.motor_sequence(direction)
 
-        print(f'move:: axis={self.axis}')
         if self.axis == "y":
             time.sleep(self.get_sleep_duration(duration))
             new_direction = direction * -1
