@@ -26,7 +26,7 @@ class Motor:
     y_axis_pins = [11,13,15,37]
     control_pins = [0, 0, 0, 0]
 
-    default_distance = 40
+    default_distance = 20
     default_move_rate = 0.001
 
 
