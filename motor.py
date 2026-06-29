@@ -1,44 +1,39 @@
-from enum import Enum, auto
 import motor_sequencer
 import time
 import threading
 
-class MotorAxis(Enum):
-    X = auto()
-    Y = auto()
+class MotorPosition:
+    position = 0
+    _lock = threading.Lock()
 
-class MotorStepType(Enum):
-    MOVE = auto()
-    WAIT = auto()
+    def write(self, position):
+        if position >= -1 and position <= 1:
+            with _lock:
+                self.position = position
+        else:
+            print(f'error writing position: {position}')
 
-class MotorWait(Enum):
-    SHORT = 0.1
-    MEDIUM = 0.35
-    LONG = 0.75
-
-
-class MotorStep:
-    step_type: MotorStepType
-    action = None
+    def get(self):
+        return self.position
 
 
 class Motor:
 
-    y_axis_pins = [11,13,15,37]
+    position = MotorPosition()
+
     x_axis_pins = [16,18,22,32]
-    axis: MotorAxis = None
-    step_queue: MotorStep[] = []
+    y_axis_pins = [11,13,15,37]
     control_pins = [0, 0, 0, 0]
+
     default_distance = 40
     default_move_rate = 0.001
-    motor_running = False
 
 
-    def __init__(self, axis: MotorAxis):
+    def __init__(self, axis):
         self.axis = axis
-        if axis == MotorAxis.X:
+        if axis == "x":
             self.control_pins = x_axis_pins
-        else if axis == MotorAxis.Y:
+        else if axis == "y":
             self.control_pins = y_axis_pins
         set_up_pins()
 
@@ -50,58 +45,46 @@ class Motor:
             GPIO.output(pin, 0)
 
 
-    def queue(self, step):
-        print(f'queuing {step.step_type} step')
-        step_queue.push(step)
-
-
-    def dequeue(self):
-        step_to_remove = step_queue[0]
-        if step_to_remove:
-            print(f'removing {step_to_remove.step_type} step')
-            step_queue.pop(0)
-        else:
-            print(f'step_queue is already empty')
-
-
-    def wait(self, seconds: float):
-        time.sleep(seconds)
+    def get_sleep_duration(duration_digit):
+        if duration_digit == 1:
+            return 0.1
+        elif duration_digit == 2:
+            return 0.35
+        elif duration_digit == 3:
+            return 0.75
     
 
-    def move(self, sequence, distance = default_distance, rate = default_move_rate):
+    def motor_sequence(self, sequence):
+        distance = self.default_distance
+        rate = self.default_move_rate
         for i in range(int(distance)):
             for step in range(len(sequence)):
                 x_step = sequence[step % len(sequence)]
                 for pin_idx in range(4):
-                    GPIO.output(leftright_pins[pin_idx], x_step[pin_idx])
+                    GPIO.output(control_pins[pin_idx], x_step[pin_idx])
                 time.sleep(rate)
 
 
-    def execute(self):
-        if not self.motor_running:
-            self.motor_running = True
-            # threading.Thread(target=_kb_loop, daemon=True)
-            while step_queue:
-                step = step_queue[0]
-                if step:
-                    if step.step_type == MotorStepType.WAIT:
-                        wait(step.action)
-                    else if step.step_type == MotorStepType.MOVE:
-                        move(step.action)
-                    else:
-                        print(f'invalid step: {step.action}')
-                    self.dequeue()
-            self.motor_running = False
+    def move(self, direction, duration):
+        new_position = self.position.get() + direction
+        if new_position < -1 or new_position > 1:
+            print(f'cannot move past position {self.position.get()}')
+            return
+
+        self.position.write(new_position)
+        if direction > 0:
+            self.motor_sequence(motor_sequencer.forward())
+        elif direction < 0:
+            self.motor_sequence(motor_sequencer.backward())
+
+        if axis == "y":
+            time.sleep(get_sleep_duration(duration))
+            new_direction = direction * -1
+            new_position = self.position.get() + new_direction
+            self.position.write(new_position)
+            if new_direction > 0:
+                self.motor_sequence(motor_sequencer.forward())
+            elif new_direction < 0:
+                self.motor_sequence(motor_sequencer.backward())
 
 
-    # def up(self, wait: MotorWait):
-    #     if axis == MotorAxis.Y:
-
-
-    # def down(self):
-
-
-    # def left(self):
-
-
-    # def right(self):
