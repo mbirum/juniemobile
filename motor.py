@@ -21,6 +21,7 @@ class MotorPosition:
 class Motor:
 
     position = MotorPosition()
+    is_free = True
 
     # x_axis_pins = [16,18,22,32]
     # y_axis_pins = [11,13,15,37]
@@ -57,15 +58,20 @@ class Motor:
             return 0.75
     
 
+    def free(self):
+        return self.is_free
+
     def motor_sequence(self, sequence):
         distance = self.default_distance
         rate = self.default_move_rate
+        self.is_free = False
         for i in range(int(distance)):
             for step in range(len(sequence)):
                 x_step = sequence[step % len(sequence)]
                 for pin_idx in range(4):
                     GPIO.output(self.control_pins[pin_idx], x_step[pin_idx])
                 time.sleep(rate)
+        self.is_free = True
 
 
     def move(self, direction, duration):

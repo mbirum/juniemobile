@@ -24,9 +24,11 @@ def get_axis_direction_duration(key):
 def on_press(key):
     axis, direction, duration = get_axis_direction_duration(key)
     if axis == "x":
-        xmotor.move(direction, duration)
+        if xmotor.free():
+            xmotor.move(direction, duration)
     elif axis == "y":
-        ymotor.move(direction, duration)
+        if ymotor.free():
+            ymotor.move(direction, duration)
 
 def main():
     print("DRIVE JUNIE, DRIVE!")
