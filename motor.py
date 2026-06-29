@@ -34,7 +34,7 @@ class Motor:
     control_pins = [0, 0, 0, 0]
 
 
-    def __init__(self, axis):
+    def __init__(self, axis): vb 8u
         self.axis = axis
         if axis == "x":
             self.control_pins = self.x_axis_pins
@@ -63,6 +63,7 @@ class Motor:
         return self.is_free
 
     def motor_sequence(self, direction, distance = default_distance, rate = default_move_rate):
+        print(f'motor_sequence:: distance={distance} rate={rate}')
         sequence = motor_sequencer.forward()
         if direction < 0:
             sequence = motor_sequencer.backward()
@@ -86,6 +87,7 @@ class Motor:
         self.position.write(new_position)
         self.motor_sequence(direction)
 
+        print(f'move:: axis={self.axis}')
         if self.axis == "y":
             time.sleep(self.get_sleep_duration(duration))
             new_direction = direction * -1
