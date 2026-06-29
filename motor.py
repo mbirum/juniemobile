@@ -34,7 +34,7 @@ class Motor:
     control_pins = [0, 0, 0, 0]
 
 
-    def __init__(self, axis): vb 8u
+    def __init__(self, axis):
         self.axis = axis
         if axis == "x":
             self.control_pins = self.x_axis_pins
