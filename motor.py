@@ -1,6 +1,7 @@
 import motor_sequencer
 import time
 import threading
+import RPi.GPIO as GPIO
 
 class MotorPosition:
     position = 0
