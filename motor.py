@@ -93,7 +93,7 @@ class Motor:
             new_direction = direction * -1
             new_position = self.position.get() + new_direction
             self.position.write(new_position)
-            self.motor_sequence(direction)
+            self.motor_sequence(new_direction)
 
 
     def go_home(self):
