@@ -35,7 +35,7 @@ class Motor:
             self.control_pins = self.x_axis_pins
         elif axis == "y":
             self.control_pins = self.y_axis_pins
-        set_up_pins()
+        self.set_up_pins()
 
 
     def set_up_pins(self):
