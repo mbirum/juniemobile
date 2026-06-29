@@ -44,6 +44,7 @@ def main():
     except KeyboardInterrupt:
         pass
     finally:
+        print('')
         print("Returning xmotor")
         xmotor.go_home()
         print("Returning ymotor")
