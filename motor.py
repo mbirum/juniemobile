@@ -32,9 +32,9 @@ class Motor:
     def __init__(self, axis):
         self.axis = axis
         if axis == "x":
-            self.control_pins = x_axis_pins
+            self.control_pins = self.x_axis_pins
         elif axis == "y":
-            self.control_pins = y_axis_pins
+            self.control_pins = self.y_axis_pins
         set_up_pins()
 
 
