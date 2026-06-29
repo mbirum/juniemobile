@@ -2,6 +2,7 @@ import signal
 from sshkeyboard import listen_keyboard
 import threading
 from motor import Motor
+import RPi.GPIO as GPIO
 
 xmotor = Motor("x")
 ymotor = Motor("y")
@@ -60,6 +61,7 @@ def main():
         xmotor.go_home()
         print("Returning ymotor")
         ymotor.go_home()
+        GPIO.cleanup()
         print("Exiting.")
 
 if __name__ == '__main__':
