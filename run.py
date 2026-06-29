@@ -4,7 +4,7 @@ import threading
 from motor import Motor
 
 xmotor = Motor("x")
-ymotor = Motor("x")
+ymotor = Motor("y")
 
 TICK = 0.01
 

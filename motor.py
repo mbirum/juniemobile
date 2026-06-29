@@ -22,8 +22,10 @@ class Motor:
 
     position = MotorPosition()
 
-    x_axis_pins = [16,18,22,32]
-    y_axis_pins = [11,13,15,37]
+    # x_axis_pins = [16,18,22,32]
+    # y_axis_pins = [11,13,15,37]
+    x_axis_pins = [11,13,15,37]
+    y_axis_pins = [16,18,22,32]
     control_pins = [0, 0, 0, 0]
 
     default_distance = 20
