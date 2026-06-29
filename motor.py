@@ -63,7 +63,7 @@ class Motor:
         return self.is_free
 
     def motor_sequence(self, direction, distance = default_distance, budge = False, rate = default_move_rate):
-        print(f'motor_sequence:: direction={direction} distance={distance} rate={rate}')
+        print(f'{axis} motor_sequence:: direction={direction} distance={distance} rate={rate}')
         sequence = motor_sequencer.forward()
         if direction < 0:
             sequence = motor_sequencer.backward()
