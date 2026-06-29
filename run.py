@@ -23,6 +23,7 @@ def get_axis_direction_duration(key):
 
 def on_press(key):
     axis, direction, duration = get_axis_direction_duration(key)
+    print(f'\{{axis}\} \{{direction}\} \{{duration}\}')
     if axis == "x":
         if xmotor.free():
             xmotor.move(direction, duration)
@@ -45,7 +46,7 @@ def main():
     finally:
         print("Returning xmotor")
         xmotor.go_home()
-        print("Returning y motor")
+        print("Returning ymotor")
         ymotor.go_home()
         print("Exiting.")
 
