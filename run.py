@@ -34,12 +34,12 @@ def on_press(key):
     if axis == "x":
         if key == "o" or key == "p":
             xmotor.budge(direction)
-        if xmotor.free():
+        elif xmotor.free():
             xmotor.move(direction, duration)
     elif axis == "y":
         if key == "l" or key == ";":
             ymotor.budge(direction)
-        if ymotor.free():
+        elif ymotor.free():
             ymotor.move(direction, duration)
 
 def main():
