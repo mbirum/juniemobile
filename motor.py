@@ -95,7 +95,7 @@ class Motor:
 
 
     def go_home(self):
-        if self.degree == 0
+        if self.degree == 0:
             return
 
         direction = 1
