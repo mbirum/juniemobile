@@ -29,7 +29,6 @@ def on_press(key):
         ymotor.move(direction, duration)
 
 def main():
-    signal.signal(signal.SIGINT, _signal_handler)
     print("DRIVE JUNIE, DRIVE!")
     # Run sshkeyboard listener in a daemon thread so the main loop can run.
     def _kb_loop():
