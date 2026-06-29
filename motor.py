@@ -72,7 +72,7 @@ class Motor:
                 x_step = sequence[step % len(sequence)]
                 for pin_idx in range(4):
                     GPIO.output(self.control_pins[pin_idx], x_step[pin_idx])
-                # time.sleep(rate)
+                time.sleep(rate)
             self.degree = self.degree + direction
         self.is_free = True
 
