@@ -43,6 +43,10 @@ def main():
     except KeyboardInterrupt:
         pass
     finally:
+        print("Returning xmotor")
+        xmotor.go_home()
+        print("Returning y motor")
+        ymotor.go_home()
         print("Exiting.")
 
 if __name__ == '__main__':

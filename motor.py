@@ -22,6 +22,7 @@ class Motor:
 
     position = MotorPosition()
     is_free = True
+    degree = 0
 
     # x_axis_pins = [16,18,22,32]
     # y_axis_pins = [11,13,15,37]
@@ -61,9 +62,10 @@ class Motor:
     def free(self):
         return self.is_free
 
-    def motor_sequence(self, sequence):
-        distance = self.default_distance
-        rate = self.default_move_rate
+    def motor_sequence(self, direction, distance = self.default_distance, rate = self.default_move_rate):
+        sequence = motor_sequencer.forward()
+        if direction < 0:
+            sequence = motor_sequencer.backward()
         self.is_free = False
         for i in range(int(distance)):
             for step in range(len(sequence)):
@@ -71,6 +73,7 @@ class Motor:
                 for pin_idx in range(4):
                     GPIO.output(self.control_pins[pin_idx], x_step[pin_idx])
                 time.sleep(rate)
+            self.degree = self.degree + direction
         self.is_free = True
 
 
@@ -81,19 +84,23 @@ class Motor:
             return
 
         self.position.write(new_position)
-        if direction > 0:
-            self.motor_sequence(motor_sequencer.forward())
-        elif direction < 0:
-            self.motor_sequence(motor_sequencer.backward())
+        self.motor_sequence(direction)
 
         if self.axis == "y":
             time.sleep(self.get_sleep_duration(duration))
             new_direction = direction * -1
             new_position = self.position.get() + new_direction
             self.position.write(new_position)
-            if new_direction > 0:
-                self.motor_sequence(motor_sequencer.forward())
-            elif new_direction < 0:
-                self.motor_sequence(motor_sequencer.backward())
+            self.motor_sequence(direction)
 
+
+    def go_home(self):
+        if self.degree == 0
+            return
+
+        direction = 1
+        if self.degree > 0:
+            direction = -1
+
+        self.motor_sequence(direction, self.degree)
 
