@@ -106,5 +106,5 @@ class Motor:
         if self.degree > 0:
             direction = -1
 
-        self.motor_sequence(direction, self.degree)
+        self.motor_sequence(direction, abs(self.degree))
 
