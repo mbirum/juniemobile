@@ -5,8 +5,6 @@ from motor import Motor
 import RPi.GPIO as GPIO
 import time
 
-# xmotor = Motor("x")
-# ymotor = Motor("y")
 
 up_pin = 16
 down_pin = 18
@@ -25,14 +23,6 @@ def get_axis_direction_duration(key):
         return "y", -1, duration
     elif key == "1" or key == "2" or key == "3":
         return "y", 1, int(key)
-    elif key == "o":
-        return "x", -1, 2
-    elif key == "p":
-        return "x", 1, 2
-    elif key == "l":
-        return "y", -1, 2
-    elif key == ";":
-        return "y", 1, 2 
     else:
         return "none", 0, 0
 
@@ -90,8 +80,11 @@ def on_press(key):
             GPIO.output(down_pin, GPIO.LOW)
             print("--")
 
+def on_release(key):
+    print(f"Key released: {key}")
+
 def main():
-    print("DRIVE JUNIE, DRIVE!")
+    print("Where's Junie?")
     print('')
     
     GPIO.setmode(GPIO.BOARD)
@@ -105,7 +98,8 @@ def main():
     GPIO.output(right_pin, GPIO.LOW)
 
     def _kb_loop():
-        listen_keyboard(on_press=on_press)
+        listen_keyboard(on_press=on_press, on_release=on_release, delay_second_char=0.01, delay_other_char=0.01)
+        
     kb_thread = threading.Thread(target=_kb_loop, daemon=True)
     kb_thread.start()
     
@@ -115,13 +109,9 @@ def main():
     except KeyboardInterrupt:
         pass
     finally:
-        # print('')
-        # print("Returning xmotor")
-        # xmotor.go_home()
-        # print("Returning ymotor")
-        # ymotor.go_home()
         GPIO.cleanup()
         print("Exiting.")
+
 
 if __name__ == '__main__':
     main()
