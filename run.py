@@ -43,12 +43,14 @@ def on_press(key):
             GPIO.output(left_pin, 1)
             time.sleep(1)
             GPIO.output(left_pin, 0)
+            print("--")
         elif direction > 0:
             # right
             print("right")
             GPIO.output(right_pin, 1)
             time.sleep(1)
             GPIO.output(right_pin, 0)
+            print("--")
     elif axis == "y":
         if direction > 0:
             # up
@@ -56,12 +58,14 @@ def on_press(key):
             GPIO.output(up_pin, 1)
             time.sleep(2)
             GPIO.output(up_pin, 0)
+            print("--")
         elif direction < 0:
             # down
             print("down")
             GPIO.output(down_pin, 1)
             time.sleep(1)
             GPIO.output(down_pin, 0)
+            print("--")
 
 def main():
     print("DRIVE JUNIE, DRIVE!")
