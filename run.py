@@ -14,22 +14,21 @@ right_pin = 32
 wheel_direction = 0
 gas = 0
 
-def get_axis_direction_duration(key):
+def get_axis_direction(key):
     if key == "left":
-        return "x", -1, 0
+        return "x", -1
     elif key == "right":
-        return "x", 1, 0
-    elif key == "q" or key == "w" or key == "e":
-        duration = 1 if key == "q" else 2 if key == "w" else 3
-        return "y", -1, duration
-    elif key == "1" or key == "2" or key == "3":
-        return "y", 1, int(key)
+        return "x", 1
+    elif key == "1":
+        return "y", -1
+    elif key == "2":
+        return "y", 1
     else:
-        return "none", 0, 0
+        return "none", 0
 
 def on_press(key):
     global wheel_direction, gas
-    axis, direction, duration = get_axis_direction_duration(key)
+    axis, direction = get_axis_direction(key)
     if axis == "x":
         if direction < 0:
             # left
