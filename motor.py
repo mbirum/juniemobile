@@ -27,18 +27,18 @@ class Motor:
     is_free = True
     degree = 0
 
-    x_axis_pins = [16,18,22,32]
-    y_axis_pins = [11,13,15,37]
-    # x_axis_pins = [11,13,15,37]
-    # y_axis_pins = [16,18,22,32]
-    control_pins = [0, 0, 0, 0]
+    # x_axis_pins = [16,18,22,32]
+    # y_axis_pins = [11,13,15,37]
+    ## x_axis_pins = [11,13,15,37]
+    ## y_axis_pins = [16,18,22,32]
+    control_pins = [16,18, 22, 32]
 
     def __init__(self, axis):
         self.axis = axis
-        if axis == "x":
-            self.control_pins = self.x_axis_pins
-        elif axis == "y":
-            self.control_pins = self.y_axis_pins
+        # if axis == "x":
+        #     self.control_pins = self.x_axis_pins
+        # elif axis == "y":
+        #     self.control_pins = self.y_axis_pins
         self.set_up_pins()
 
     def set_up_pins(self):

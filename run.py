@@ -3,9 +3,15 @@ from sshkeyboard import listen_keyboard
 import threading
 from motor import Motor
 import RPi.GPIO as GPIO
+import time
 
 xmotor = Motor("x")
 ymotor = Motor("y")
+
+up_pin = 16
+down_pin = 18
+left_pin = 22
+right_pin = 32
 
 def get_axis_direction_duration(key):
     if key == "left":
@@ -31,20 +37,42 @@ def get_axis_direction_duration(key):
 def on_press(key):
     axis, direction, duration = get_axis_direction_duration(key)
     if axis == "x":
-        if key == "o" or key == "p":
-            xmotor.budge(direction)
-        elif xmotor.free():
-            xmotor.move(direction, duration)
+        if direction < 0:
+            # left
+            GPIO.output(left_pin, 1)
+            time.sleep(1)
+            GPIO.output(left_pin, 0)
+        elif direction > 0:
+            # right
+            GPIO.output(right_pin, 1)
+            time.sleep(1)
+            GPIO.output(right_pin, 0)
     elif axis == "y":
-        if key == "l" or key == ";":
-            ymotor.budge(direction)
-        elif ymotor.free():
-            ymotor.move(direction, duration)
+        if direction > 0:
+            # up
+            GPIO.output(up_pin, 1)
+            time.sleep(2)
+            GPIO.output(up_pin, 0)
+        elif direction < 0:
+            # down
+            GPIO.output(down_pin, 1)
+            time.sleep(1)
+            GPIO.output(down_pin, 0)
 
 def main():
     print("DRIVE JUNIE, DRIVE!")
     print('')
     
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(up_pin, GPIO.OUT)
+    GPIO.output(up_pin, 0)
+    GPIO.setup(down_pin, GPIO.OUT)
+    GPIO.output(down_pin, 0)
+    GPIO.setup(left_pin, GPIO.OUT)
+    GPIO.output(left_pin, 0)
+    GPIO.setup(right_pin, GPIO.OUT)
+    GPIO.output(right_pin, 0)
+
     def _kb_loop():
         listen_keyboard(on_press=on_press)
     kb_thread = threading.Thread(target=_kb_loop, daemon=True)
