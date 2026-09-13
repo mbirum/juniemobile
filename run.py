@@ -44,21 +44,27 @@ def on_press(key):
             # left
             if wheel_direction > -1:
                 wheel_direction = wheel_direction - 1
+                print(f"wheel_direction: {wheel_direction}")
             if wheel_direction < 0:
                 print("left")
                 GPIO.output(left_pin, GPIO.HIGH)
                 print("--")
             else:
+                print("straight")
                 GPIO.output(left_pin, GPIO.LOW)
+                GPIO.output(right_pin, GPIO.LOW)
         elif direction > 0:
             # right
             if wheel_direction < 1:
                 wheel_direction = wheel_direction + 1
+                print(f"wheel_direction: {wheel_direction}")
             if wheel_direction > 0:
                 print("right")
                 GPIO.output(right_pin, GPIO.HIGH)
                 print("--")
             else:
+                print("straight")
+                GPIO.output(left_pin, GPIO.LOW)
                 GPIO.output(right_pin, GPIO.LOW)
     elif axis == "y":
         if direction > 0:
