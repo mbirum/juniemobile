@@ -37,6 +37,7 @@ def get_axis_direction_duration(key):
         return "none", 0, 0
 
 def on_press(key):
+    global wheel_direction
     axis, direction, duration = get_axis_direction_duration(key)
     if axis == "x":
         if direction < 0:
