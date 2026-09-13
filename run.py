@@ -39,22 +39,26 @@ def on_press(key):
     if axis == "x":
         if direction < 0:
             # left
+            print("left")
             GPIO.output(left_pin, 1)
             time.sleep(1)
             GPIO.output(left_pin, 0)
         elif direction > 0:
             # right
+            print("right")
             GPIO.output(right_pin, 1)
             time.sleep(1)
             GPIO.output(right_pin, 0)
     elif axis == "y":
         if direction > 0:
             # up
+            print("up")
             GPIO.output(up_pin, 1)
             time.sleep(2)
             GPIO.output(up_pin, 0)
         elif direction < 0:
             # down
+            print("down")
             GPIO.output(down_pin, 1)
             time.sleep(1)
             GPIO.output(down_pin, 0)
