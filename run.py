@@ -98,7 +98,7 @@ def main():
     GPIO.output(right_pin, GPIO.LOW)
 
     def _kb_loop():
-        listen_keyboard(on_press=on_press, on_release=on_release, delay_second_char=0.01, delay_other_chars=0.01)
+        listen_keyboard(on_press=on_press, on_release=on_release, delay_second_char=0.75, delay_other_chars=0.05)
 
     kb_thread = threading.Thread(target=_kb_loop, daemon=True)
     kb_thread.start()
