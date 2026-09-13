@@ -56,7 +56,12 @@ def on_press(key):
             # up
             print("up")
             GPIO.output(up_pin, GPIO.HIGH)
-            time.sleep(2)
+            if duration == 1:
+                time.sleep(0.1)
+            elif duration == 2:
+                time.sleep(0.35)
+            elif duration == 3:
+                time.sleep(0.75)
             GPIO.output(up_pin, GPIO.LOW)
             print("--")
         elif direction < 0:
