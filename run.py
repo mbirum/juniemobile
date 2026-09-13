@@ -1,7 +1,6 @@
 import signal
 from sshkeyboard import listen_keyboard
 import threading
-from motor import Motor
 import RPi.GPIO as GPIO
 import time
 
