@@ -13,6 +13,8 @@ down_pin = 18
 left_pin = 22
 right_pin = 32
 
+wheel_direction = 0
+
 def get_axis_direction_duration(key):
     if key == "left":
         return "x", -1, 0
@@ -39,22 +41,27 @@ def on_press(key):
     if axis == "x":
         if direction < 0:
             # left
-            print("left")
-            GPIO.output(left_pin, GPIO.HIGH)
-            time.sleep(1)
-            GPIO.output(left_pin, GPIO.LOW)
-            print("--")
+            if wheel_direction > -1:
+                wheel_direction = wheel_direction - 1
+            if wheel_direction < 0:
+                print("left")
+                GPIO.output(left_pin, GPIO.HIGH)
+                print("--")
+            else:
+                GPIO.output(left_pin, GPIO.LOW)
         elif direction > 0:
             # right
-            print("right")
-            GPIO.output(right_pin, GPIO.HIGH)
-            time.sleep(1)
-            GPIO.output(right_pin, GPIO.LOW)
-            print("--")
+            if wheel_direction < 1:
+                wheel_direction = wheel_direction + 1
+            if wheel_direction > 0:
+                print("right")
+                GPIO.output(right_pin, GPIO.HIGH)
+                print("--")
+            else:
+                GPIO.output(right_pin, GPIO.LOW)
     elif axis == "y":
         if direction > 0:
-            # up
-            print("up")
+            print("forward")
             GPIO.output(up_pin, GPIO.HIGH)
             if duration == 1:
                 time.sleep(0.1)
@@ -65,10 +72,14 @@ def on_press(key):
             GPIO.output(up_pin, GPIO.LOW)
             print("--")
         elif direction < 0:
-            # down
-            print("down")
+            print("back")
             GPIO.output(down_pin, GPIO.HIGH)
-            time.sleep(1)
+            if duration == 1:
+                time.sleep(0.1)
+            elif duration == 2:
+                time.sleep(0.35)
+            elif duration == 3:
+                time.sleep(0.75)
             GPIO.output(down_pin, GPIO.LOW)
             print("--")
 
