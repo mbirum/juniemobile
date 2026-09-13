@@ -35,11 +35,8 @@ def on_press(key):
             if wheel_direction > -1:
                 wheel_direction = wheel_direction - 1
             if wheel_direction < 0:
-                print("left")
                 GPIO.output(left_pin, GPIO.HIGH)
-                print("--")
             else:
-                print("straight")
                 GPIO.output(left_pin, GPIO.LOW)
                 GPIO.output(right_pin, GPIO.LOW)
         elif direction > 0:
@@ -47,11 +44,8 @@ def on_press(key):
             if wheel_direction < 1:
                 wheel_direction = wheel_direction + 1
             if wheel_direction > 0:
-                print("right")
                 GPIO.output(right_pin, GPIO.HIGH)
-                print("--")
             else:
-                print("straight")
                 GPIO.output(left_pin, GPIO.LOW)
                 GPIO.output(right_pin, GPIO.LOW)
     elif axis == "y":
@@ -60,11 +54,8 @@ def on_press(key):
             if gas > -1:
                 gas = gas - 1
             if gas < 0:
-                print("down")
                 GPIO.output(down_pin, GPIO.HIGH)
-                print("--")
             else:
-                print("stop")
                 GPIO.output(down_pin, GPIO.LOW)
                 GPIO.output(up_pin, GPIO.LOW)
         elif direction > 0:
@@ -72,11 +63,8 @@ def on_press(key):
             if gas < 1:
                 gas = gas + 1
             if gas > 0:
-                print("up")
                 GPIO.output(up_pin, GPIO.HIGH)
-                print("--")
             else:
-                print("stop")
                 GPIO.output(down_pin, GPIO.LOW)
                 GPIO.output(up_pin, GPIO.LOW)
     
@@ -88,7 +76,6 @@ def on_press(key):
 
 def main():
     print("Where's Junie?")
-    print('')
     
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(up_pin, GPIO.OUT)
