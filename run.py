@@ -12,6 +12,7 @@ left_pin = 22
 right_pin = 32
 
 wheel_direction = 0
+gas = 0
 
 def get_axis_direction_duration(key):
     if key == "left":
@@ -27,14 +28,13 @@ def get_axis_direction_duration(key):
         return "none", 0, 0
 
 def on_press(key):
-    global wheel_direction
+    global wheel_direction, gas
     axis, direction, duration = get_axis_direction_duration(key)
     if axis == "x":
         if direction < 0:
             # left
             if wheel_direction > -1:
                 wheel_direction = wheel_direction - 1
-                print(f"wheel_direction: {wheel_direction}")
             if wheel_direction < 0:
                 print("left")
                 GPIO.output(left_pin, GPIO.HIGH)
@@ -47,7 +47,6 @@ def on_press(key):
             # right
             if wheel_direction < 1:
                 wheel_direction = wheel_direction + 1
-                print(f"wheel_direction: {wheel_direction}")
             if wheel_direction > 0:
                 print("right")
                 GPIO.output(right_pin, GPIO.HIGH)
@@ -57,31 +56,31 @@ def on_press(key):
                 GPIO.output(left_pin, GPIO.LOW)
                 GPIO.output(right_pin, GPIO.LOW)
     elif axis == "y":
-        if direction > 0:
-            print("forward")
-            GPIO.output(up_pin, GPIO.HIGH)
-            if duration == 1:
-                time.sleep(0.1)
-            elif duration == 2:
-                time.sleep(0.35)
-            elif duration == 3:
-                time.sleep(0.75)
-            GPIO.output(up_pin, GPIO.LOW)
-            print("--")
-        elif direction < 0:
-            print("back")
-            GPIO.output(down_pin, GPIO.HIGH)
-            if duration == 1:
-                time.sleep(0.1)
-            elif duration == 2:
-                time.sleep(0.35)
-            elif duration == 3:
-                time.sleep(0.75)
-            GPIO.output(down_pin, GPIO.LOW)
-            print("--")
+        if direction < 0:
+            # down
+            if gas > -1:
+                gas = gas - 1
+            if gas < 0:
+                print("down")
+                GPIO.output(down_pin, GPIO.HIGH)
+                print("--")
+            else:
+                print("stop")
+                GPIO.output(down_pin, GPIO.LOW)
+                GPIO.output(up_pin, GPIO.LOW)
+        elif direction > 0:
+            # up
+            if gas < 1:
+                gas = gas + 1
+            if gas > 0:
+                print("up")
+                GPIO.output(up_pin, GPIO.HIGH)
+                print("--")
+            else:
+                print("stop")
+                GPIO.output(down_pin, GPIO.LOW)
+                GPIO.output(up_pin, GPIO.LOW)
 
-def on_release(key):
-    print(f"Key released: {key}")
 
 def main():
     print("Where's Junie?")
@@ -98,7 +97,7 @@ def main():
     GPIO.output(right_pin, GPIO.LOW)
 
     def _kb_loop():
-        listen_keyboard(on_press=on_press, on_release=on_release, delay_second_char=0.75, delay_other_chars=0.05)
+        listen_keyboard(on_press=on_press)
 
     kb_thread = threading.Thread(target=_kb_loop, daemon=True)
     kb_thread.start()
