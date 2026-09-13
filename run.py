@@ -75,13 +75,13 @@ def main():
     
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(up_pin, GPIO.OUT)
-    GPIO.output(up_pin, 0)
+    GPIO.output(up_pin, GPIO.LOW)
     GPIO.setup(down_pin, GPIO.OUT)
-    GPIO.output(down_pin, 0)
+    GPIO.output(down_pin, GPIO.LOW)
     GPIO.setup(left_pin, GPIO.OUT)
-    GPIO.output(left_pin, 0)
+    GPIO.output(left_pin, GPIO.LOW)
     GPIO.setup(right_pin, GPIO.OUT)
-    GPIO.output(right_pin, 0)
+    GPIO.output(right_pin, GPIO.LOW)
 
     def _kb_loop():
         listen_keyboard(on_press=on_press)
