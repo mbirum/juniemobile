@@ -5,8 +5,8 @@ from motor import Motor
 import RPi.GPIO as GPIO
 import time
 
-xmotor = Motor("x")
-ymotor = Motor("y")
+# xmotor = Motor("x")
+# ymotor = Motor("y")
 
 up_pin = 16
 down_pin = 18
@@ -92,11 +92,11 @@ def main():
     except KeyboardInterrupt:
         pass
     finally:
-        print('')
-        print("Returning xmotor")
-        xmotor.go_home()
-        print("Returning ymotor")
-        ymotor.go_home()
+        # print('')
+        # print("Returning xmotor")
+        # xmotor.go_home()
+        # print("Returning ymotor")
+        # ymotor.go_home()
         GPIO.cleanup()
         print("Exiting.")
 
