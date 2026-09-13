@@ -79,6 +79,11 @@ def on_press(key):
                 print("stop")
                 GPIO.output(down_pin, GPIO.LOW)
                 GPIO.output(up_pin, GPIO.LOW)
+    
+    left_char = "<" if wheel_direction < 0 else "-"
+    right_char = ">" if wheel_direction > 0 else "-"
+    middle_char = "^" if gas > 0 else "v" if gas < 0 else "-"
+    print(f'{left_char}{middle_char}{right_char}')
 
 
 def main():
